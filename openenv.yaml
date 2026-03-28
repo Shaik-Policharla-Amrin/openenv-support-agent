@@ -1,0 +1,23 @@
+name: support-agent-env
+description: Customer support resolution simulation
+
+observation:
+  type: object
+  properties:
+    ticket: string
+    history: array
+
+action:
+  type: object
+  properties:
+    response: string
+
+reward:
+  type: object
+  properties:
+    score: float
+
+tasks:
+  - easy
+  - medium
+  - hard
