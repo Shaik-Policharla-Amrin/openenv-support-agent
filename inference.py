@@ -3,15 +3,17 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-class Request(BaseModel):
+class Input(BaseModel):
     text: str
 
+@app.get("/")
+def root():
+    return {"message": "API is running"}
+
 @app.post("/run")
-def run(request: Request):
-    return {
-        "response": f"Support reply: {request.text}"
-    }
+def run(data: Input):
+    return {"response": f"Support reply: {data.text}"}
 
 @app.post("/reset")
 def reset():
-    return {"status": "reset done"}
+    return {"status": "ok"}
