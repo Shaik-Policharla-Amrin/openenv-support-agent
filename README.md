@@ -3,7 +3,7 @@ title: openenv-support-agent
 emoji: 🤖
 colorFrom: blue
 colorTo: green
-sdk: docker
+sdk: python
 app_file: app.py
 pinned: false
 ---
