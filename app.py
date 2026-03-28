@@ -24,7 +24,7 @@ def support_agent(query):
     response = requests.post(API_URL, headers=headers, json=payload)
 
     if response.status_code != 200:
-        return {"error": response.text}
+        return f"Error: {response.text}"
 
     data = response.json()
     return data["choices"][0]["message"]["content"]
