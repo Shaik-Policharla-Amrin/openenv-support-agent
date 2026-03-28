@@ -3,7 +3,7 @@ title: openenv-support-agent
 emoji: 🤖
 colorFrom: blue
 colorTo: green
-sdk: python
+sdk: gradio
 app_file: app.py
 pinned: false
 ---
