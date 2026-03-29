@@ -3,10 +3,8 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# STATE
 state_data = {"step": 0}
 
-# INPUT MODEL
 class StepInput(BaseModel):
     task: str
 

@@ -1,25 +1,19 @@
 import requests
-import os
 
-BASE_URL = os.getenv("API_BASE_URL")
+BASE_URL = "http://localhost:7860"
 
 def run():
     print("Running inference...")
 
-    # RESET
-    r = requests.post(f"{BASE_URL}/reset")
-    print("Reset:", r.json())
+    print(requests.post(f"{BASE_URL}/reset").json())
 
-    # TASKS (3 REQUIRED)
-    tasks = ["Say hello", "Explain AI", "What is OpenEnv?"]
+    tasks = ["hello", "Explain AI", "What is OpenEnv"]
 
     for t in tasks:
-        r = requests.post(f"{BASE_URL}/step", json={"task": t})
-        print("Step:", r.json())
+        res = requests.post(f"{BASE_URL}/step", json={"task": t})
+        print(res.json())
 
-    # STATE
-    r = requests.get(f"{BASE_URL}/state")
-    print("State:", r.json())
+    print(requests.get(f"{BASE_URL}/state").json())
 
 if __name__ == "__main__":
     run()
