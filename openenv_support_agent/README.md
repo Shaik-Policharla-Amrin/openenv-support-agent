@@ -1,14 +1,10 @@
 ---
-title: Openenv Support Agent Environment Server
-emoji: 🏐
+title: Openenv Support Agent
+emoji: 🧠
 colorFrom: green
 colorTo: blue
 sdk: docker
-pinned: false
 app_port: 8000
-base_path: /web
-tags:
-  - openenv
 ---
 
 # Openenv Support Agent Environment
