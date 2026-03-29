@@ -1,31 +1,30 @@
 name: openenv-support-agent
 
 metadata:
-  name: OpenEnv Support Agent
-  description: Simple AI agent environment
+  name: openenv-support-agent
+  description: Simple AI support agent
 
 compute:
-  type: cpu
+  cpu: 1
 
 service:
   type: http
-  endpoints:
-    reset: /reset
-    step: /step
-    state: /state
+  port: 7860
+
+endpoints:
+  reset: /reset
+  step: /step
+  state: /state
 
 tasks:
   - id: task1
-    description: Say hello
     input: "hello"
     expected_output: "hello"
 
   - id: task2
-    description: Explain AI
     input: "Explain AI"
     expected_output: "AI"
 
   - id: task3
-    description: What is OpenEnv
     input: "What is OpenEnv"
     expected_output: "OpenEnv"
