@@ -1,0 +1,17 @@
+spec_version: 1
+
+name: openenv_support_agent
+type: environment
+
+metadata:
+  description: "Customer support agent"
+  author: "amrin"
+
+compute:
+  cpu: 1
+  memory: "4Gi"
+
+service:
+  type: http
+
+entrypoint: inference.py
