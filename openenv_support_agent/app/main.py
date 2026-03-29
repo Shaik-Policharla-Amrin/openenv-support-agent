@@ -5,7 +5,7 @@ from openai import OpenAI
 
 app = FastAPI()
 
-# ===== ENV VARIABLES =====
+# ENV
 API_BASE_URL = os.getenv("API_BASE_URL")
 MODEL_NAME = os.getenv("MODEL_NAME")
 HF_TOKEN = os.getenv("HF_TOKEN")
@@ -15,51 +15,57 @@ client = OpenAI(
     api_key=HF_TOKEN
 )
 
-# ===== STATE =====
-current_step = 0
+# STATE
+state_data = {"step": 0}
 
-# ===== MODELS =====
+# INPUT MODEL
 class StepInput(BaseModel):
     task: str
 
-# ===== ROUTES =====
-
+# ROOT
 @app.get("/")
 def home():
-    return {"status": "running"}
+    return {"status": "ok"}
 
+# RESET
 @app.post("/reset")
 def reset():
-    global current_step
-    current_step = 0
-    return {"message": "environment reset"}
+    state_data["step"] = 0
+    return {"state": state_data}
 
+# STEP
 @app.post("/step")
 def step(data: StepInput):
-    global current_step
+    try:
+        response = client.chat.completions.create(
+            model=MODEL_NAME,
+            messages=[
+                {"role": "user", "content": data.task}
+            ]
+        )
 
-    # Call LLM (MANDATORY as per rules)
-    response = client.chat.completions.create(
-        model=MODEL_NAME,
-        messages=[
-            {"role": "system", "content": "You are a helpful AI agent."},
-            {"role": "user", "content": data.task}
-        ]
-    )
+        output = response.choices[0].message.content
 
-    output = response.choices[0].message.content
+        state_data["step"] += 1
 
-    current_step += 1
+        return {
+            "observation": output,
+            "reward": 1.0,
+            "done": state_data["step"] >= 1,
+            "info": {},
+            "state": state_data   # 🔥 VERY IMPORTANT
+        }
 
-    return {
-        "observation": output,
-        "reward": 1.0,
-        "done": current_step >= 1,
-        "info": {}
-    }
+    except Exception as e:
+        return {
+            "observation": str(e),
+            "reward": 0.0,
+            "done": True,
+            "info": {"error": str(e)},
+            "state": state_data
+        }
 
+# STATE
 @app.get("/state")
-def state():
-    return {
-        "step": current_step
-    }
+def get_state():
+    return state_data
