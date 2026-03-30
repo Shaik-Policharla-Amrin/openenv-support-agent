@@ -1,0 +1,32 @@
+sname: openenv-agent-final
+description: AI Support Agent
+
+entrypoint: server.app:main
+
+service:
+  type: http
+  port: 7860
+
+endpoints:
+  reset: /reset
+  step: /step
+  state: /state
+
+tasks:
+  - id: task1
+    input: "hello"
+    grader:
+      type: exact_match
+      expected: "hello"
+
+  - id: task2
+    input: "Explain AI"
+    grader:
+      type: contains
+      expected: "AI"
+
+  - id: task3
+    input: "What is OpenEnv"
+    grader:
+      type: contains
+      expected: "OpenEnv"
