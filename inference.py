@@ -5,27 +5,30 @@ import subprocess
 BASE_URL = "http://localhost:7860"
 
 def start_server():
-    # Start your FastAPI server
     subprocess.Popen(
-        ["python", "-m", "uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "7860"],
+        ["python3", "-m", "uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "7860"],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL
     )
-    time.sleep(5)  # give time to start
+
+    # wait until server responds
+    for _ in range(10):
+        try:
+            requests.get(BASE_URL, timeout=1)
+            return
+        except:
+            time.sleep(0.5)
 
 def safe_post(url, payload=None):
-    for _ in range(5):
+    for _ in range(3):
         try:
-            return requests.post(url, json=payload, timeout=5).json()
+            res = requests.post(url, json=payload, timeout=3)
+            return res.json() if res.content else {}
         except:
-            time.sleep(1)
-    return {"error": "request failed"}
-
+            time.sleep(0.5)
+    return {}
 def run():
     task_name = "openenv_tasks"
-
-    # 🔥 Start server FIRST
-    start_server()
 
     print(f"[START] task={task_name}", flush=True)
 
@@ -45,11 +48,6 @@ def run():
     final_score = sum(scores) / len(scores)
 
     print(f"[END] task={task_name} score={final_score} steps={len(tasks)}", flush=True)
-
+    
 if __name__ == "__main__":
     run()
-
-    # 🔥 KEEP CONTAINER ALIVE (IMPORTANT)
-    import time
-    while True:
-        time.sleep(60)
